@@ -39,7 +39,16 @@ function Scanner(options) {
             res.write(str);
             res.end();
 	});
-        
+	app.get('/urls', function(req, res) {
+	    var urls = [];
+            for(var url in self.addr_working) {
+                urls.push(url);
+	    }
+		
+	    res.write(JSON.stringify(urls));
+            res.end();
+	}); 
+       
         http.createServer(app).listen(config.http_port, function() {
             console.log("HTTP server listening on port: ",config.http_port);    
         });
@@ -236,7 +245,9 @@ function Scanner(options) {
                                "b092f6b", 
                                "b092f6b-dirty",
 			       "649807a",
-			       "649807a-dirty"];
+			       "649807a-dirty",
+                               "d7ddaa4",
+                               "d7ddaa4-dirty"];
 
         digest_ip(info, function(err, fee){
             if(!err) {
