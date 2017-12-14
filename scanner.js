@@ -247,7 +247,11 @@ function Scanner(options) {
 			       "649807a",
 			       "649807a-dirty",
                                "d7ddaa4",
-                               "d7ddaa4-dirty"];
+                               "d7ddaa4-dirty",
+			       "d18bc96",
+			       "d18bc96-dirty",
+			       "3d0f826",
+			       "3d0f826-dirty"];
 
         digest_ip(info, function(err, fee){
             if(!err) {
