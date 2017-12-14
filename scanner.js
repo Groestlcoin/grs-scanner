@@ -127,6 +127,17 @@ function Scanner(options) {
         dpc(5000, flush_rendering);
     }
 
+    // setup flushing of api json to a file (useful for 3rd-party p2pool services)
+    if(config.flush_to_file_every_N_msec && config.flush_api) {
+        function flush_api() {
+            var str = self.json();
+            fs.writeFile(config.flush_api, str, { encoding : 'utf8'});
+            dpc(config.flush_to_file_every_N_msec, flush_api);
+        }
+
+        dpc(5000, flush_api);
+    }
+	
     // defer init
     dpc(function(){
         self.restore_working();
