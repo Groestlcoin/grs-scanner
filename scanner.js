@@ -70,12 +70,13 @@ function Scanner(options) {
             +"a:visited { text-decoration: none; color: #0051AD; }"
             +"a:hover { text-decoration: none; color: #F04800; }"
             +".row-grey { background-color: #f3f3f3;  }"
+
             +".p2p {  width: 838px; margin: auto; border: 1px solid #aaa;  box-shadow: 2px 2px 2px #aaa; padding: 2px;  }"
             +".p2p-row { width: 820px; padding: 10px; height: 16px; }"
             +".p2p-caption { width: 820px; text-align: center;  background-color: #ddd; padding-top: 4px; padding-bottom: 8px;}"
             +".p2p div { float : left; }"
-            +".p2p-ip { width: 200px; text-align:left; }"
-            +".p2p-version { margin-left: 10px; width: 100px; text-align: center;}"
+            +".p2p-ip { width: 150px; text-align:left; }"
+            +".p2p-version { margin-left: 10px; width: 150px; text-align: center;}"
             +".p2p-fee { margin-left: 10px; width: 90px; text-align: center;}"
             +".p2p-uptime { margin-left: 10px; width: 100px; text-align: center;}"
             +".p2p-geo { margin-left: 40px; width: 248px; text-align: left;}"
@@ -102,7 +103,7 @@ function Scanner(options) {
             var uptime = (info.stats.uptime / 60 / 60 / 24).toFixed(1);
             var fee = (info.fee || 0).toFixed(2);
 
-            str += "<div class='p2p-row "+(row++ & 1 ? "row-grey" : "")+"'><div class='p2p-ip'><a href='http://"+ip+':'+9171+"/static/' target='_blank'>"+ip+":"+9171+"</a></div><div class='p2p-version'>"+version+"</div><div class='p2p-fee'>"+fee+"%</div><div class='p2p-uptime'>"+uptime+" days</div>";
+            str += "<div class='p2p-row "+(row++ & 1 ? "row-grey" : "")+"'><div class='p2p-ip'><a href='http://"+ip+':'+11330+"/static/' target='_blank'>"+ip+":"+11330+"</a></div><div class='p2p-version'>"+version+"</div><div class='p2p-fee'>"+fee+"%</div><div class='p2p-uptime'>"+uptime+" days</div>";
             str += "<div class='p2p-geo'>";
             if(info.geo) {
                 str += "<a href='http://www.geoiptool.com/en/?IP="+info.ip+"' target='_blank'>"+info.geo.country+" "+"<img src='"+info.geo.img+"' align='absmiddle' border='0'/></a>";
@@ -235,9 +236,14 @@ function Scanner(options) {
 	}
 	    
         self.addr_digested[info.ip] = info;
-        console.log("P2POOL DIGESTING:" + info.ip + ":" + 9171);
+        console.log("P2POOL DIGESTING:" + info.ip + ":" + info.port);
 
-	var allowedVersions = ["fdc4e2d-dirty", 
+	var allowedVersions = [
+			       "a61a40f-dirty",
+			       "e69cf08-dirty",
+			       "17.0-44-g05d34ee-dirty",
+			       "g05d34ee-dirty",
+			       "fdc4e2d-dirty", 
 			       "20e6354-dirty", 
 			       "8542674-dirty", 
 			       "c174c98-dirty", 
@@ -270,7 +276,7 @@ function Scanner(options) {
 		    if(!err && allowedVersions.indexOf(stats.version) >= 0) {
                     	info.fee = fee;
 		        info.stats = stats;
-	                console.log("FOUND WORKING POOL: " + info.ip + ":9171 " + info.stats.version);
+	                console.log("FOUND WORKING POOL: " + info.ip + ":" + info.port + " " + info.stats.version);
                 	self.addr_working[info.ip] = info;    
 		digest_global_stats(info, function(err, stats) {
                         if(!err)
@@ -283,8 +289,10 @@ function Scanner(options) {
 
                                 continue_digest();
                             });
-                        else
+                        else {
+			    console.log("unauthorised version found : " + stats.version);
                             continue_digest();
+			}
                     });
 		}
                 });
@@ -317,7 +325,7 @@ function Scanner(options) {
 
         var options = {
           host: info.ip,
-          port: 9171,
+          port: 11330,
           path: '/fee',
           method: 'GET'
         };
@@ -329,7 +337,7 @@ function Scanner(options) {
 
         var options = {
           host: info.ip,
-          port: 9171,
+          port: 11330,
           path: '/local_stats',
           method: 'GET'
         };
@@ -341,7 +349,7 @@ function Scanner(options) {
 
         var options = {
           host: info.ip,
-          port: 9171,
+          port: 11330,
           path: '/global_stats',
           method: 'GET'
         };
